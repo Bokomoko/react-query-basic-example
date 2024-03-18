@@ -1,0 +1,31 @@
+/* Spinning animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Style for the spinning figures */
+.figure-spin {
+  display: inline-block;
+  font-size: 24px;
+  animation: spin 2s linear infinite; /* Adjust duration as desired */
+}
+
+/* Parentheses styling */
+.figure-spin::before,
+.figure-spin::after {
+  content: "( ";
+  color: #4511ef; /* Customize the color */
+}
+
+.figure-spin::after {
+  content: " )";
+}
+
+/* Center the spinning figures */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
