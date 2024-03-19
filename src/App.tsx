@@ -17,19 +17,31 @@ function App() {
         { response: 'A dummy response from the server' },
       ]);
     },
+    refetchOnMount: false,
+    keepPreviousData: false,
   });
 
-  queryObj.isLoading;
+  console.log({ data: queryObj.data });
+  if (queryObj.isError) {
+    return <pre>{JSON.stringify(queryObj.error)}</pre>;
+  }
 
   function doTheQuery() {
-    queryObj.IsLoading = true;
     queryObj.refetch();
   }
 
   return (
     <>
-      <button onClick={() => doTheQuery()}>Click here to start awaiting</button>
+      <button
+        onClick={() => {
+          queryObj.refetch({ force: true });
+          console.log('Button pressed');
+        }}
+      >
+        Click here to start awaiting
+      </button>
       <WaitIndicator isLoading={queryObj.isLoading} />
+      {!queryObj.isLoading && <pre>{JSON.stringify(queryObj.data)}</pre>}
     </>
   );
 }
