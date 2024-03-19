@@ -2,6 +2,7 @@
 import React from 'react';
 import loadingImage from '/src/assets/loading.svg';
 
+// this is the animation. It will show the animated svg if the props is true
 const WaitIndicator = ({ isLoading }) => {
   if (isLoading) {
     return (
