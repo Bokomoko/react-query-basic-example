@@ -1,24 +1,22 @@
 import { useState } from 'react';
 
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import WaitIndicator from './components/waitindicator';
 import './App.css';
 
 function wait(duration = 1) {
   return new Promise(resolve => setTimeout(resolve, duration * 1000));
 }
+
+function obtainData() {
+  return wait(3).then(() => [{ response: 'A dummy response from the server' }]);
+}
+
 function App() {
-  // use tanstack react query to request a fake API
-  // and display the response in a loading indicator
   const queryObj = useQuery({
-    queryKey: ['AIbotAPI'],
-    queryFn: () => {
-      return wait(3).then(() => [
-        { response: 'A dummy response from the server' },
-      ]);
-    },
-    refetchOnMount: false,
-    keepPreviousData: false,
+    queryKey: ['AIrequest'],
+    queryFn: obtainData,
+    enabled: false,
   });
 
   console.log({ data: queryObj.data });
@@ -26,21 +24,20 @@ function App() {
     return <pre>{JSON.stringify(queryObj.error)}</pre>;
   }
 
-  function doTheQuery() {
-    queryObj.refetch();
-  }
-
   return (
     <>
-      <button
-        onClick={() => {
-          queryObj.refetch({ force: true });
-          console.log('Button pressed');
-        }}
-      >
-        Click here to start awaiting
-      </button>
-      <WaitIndicator isLoading={queryObj.isLoading} />
+      <div className='answer-container'>
+        <button
+          onClick={() => {
+            queryObj.refetch({ force: true });
+            console.log('Button pressed');
+          }}
+        >
+          Click here to start awaiting
+        </button>
+        <WaitIndicator isLoading={queryObj.isFetching} />
+      </div>
+      <br />
       {!queryObj.isLoading && <pre>{JSON.stringify(queryObj.data)}</pre>}
     </>
   );
